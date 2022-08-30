@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_apispec import use_kwargs
 from marshmallow import fields
+from flask_marshmallow import Marshmallow
 
 
 def create_app():
@@ -11,6 +12,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
     db = SQLAlchemy(app)
     migrate = Migrate(app, db)
+    ma = Marshmallow(app)
 
     """
     User Model
@@ -22,6 +24,17 @@ def create_app():
 
         def __repr__(self):
             return f'<User {self.id} {self.username}>'
+
+    """
+    User Schema
+    """
+    class UserSchema(ma.Schema):
+        class Meta:
+            # Fields to expose
+            fields = ("id", "username", "email")
+
+    user_schema = UserSchema()
+    users_schema = UserSchema(many=True)
 
     @app.route("/")
     def hi():
@@ -37,7 +50,7 @@ def create_app():
         db.session.add(new_user)
         db.session.commit()
 
-        return f"nice {new_user}"
+        return user_schema.dump(new_user), 200
 
     @app.route("/users", methods=["GET"])
     def get_all_users():
