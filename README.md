@@ -16,3 +16,9 @@ Need to add a new package?
 Running the app
 
 - from within the venv run `flask --app tracker --debug run`
+
+Migrate
+
+- initialize db/migrations folder `flask --app tracker db init`
+- create a migration `flask --app tracker db migrate -m "Initial migration"`
+- run migration `flask --app tracker db upgrade`
