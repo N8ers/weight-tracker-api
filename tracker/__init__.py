@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_apispec import use_kwargs
+from marshmallow import fields
 
 
 def create_app():
@@ -19,7 +21,7 @@ def create_app():
         email = db.Column(db.String(120), unique=True, nullable=False)
 
         def __repr__(self):
-            return '<User %r>' % self.username
+            return f'<User {self.id} {self.username}>'
 
     @app.route("/")
     def hi():
@@ -28,23 +30,28 @@ def create_app():
     """
     User Routes (CRUD)
     """
-    @app.route("/users")
-    def create_user():
-        pass
+    @app.route("/users", methods=["POST"])
+    @use_kwargs({"username": fields.Str(), "email": fields.Str()})
+    def create_user(username, email):
+        new_user = User(username=username, email=email)
+        db.session.add(new_user)
+        db.session.commit()
 
-    @app.route("/users")
+        return f"nice {new_user}"
+
+    @app.route("/users", methods=["GET"])
     def get_all_users():
         pass
 
-    @app.route("/users/<int:id>")
+    @app.route("/users/<int:id>", methods=["GET"])
     def get_user_by_id(id):
         pass
 
-    @app.route("/users")
+    @app.route("/users", methods=["PUT"])
     def update_user_by_id():
         pass
 
-    @app.route("/users/<int:id>")
+    @app.route("/users/<int:id>", methods=["DELETE"])
     def delete_user(id):
         pass
 
