@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_apispec import use_kwargs
+from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 from flask_marshmallow import Marshmallow
 
@@ -45,6 +45,7 @@ def create_app():
     """
     @app.route("/users", methods=["POST"])
     @use_kwargs({"username": fields.Str(), "email": fields.Str()})
+    @marshal_with(UserSchema)
     def create_user(username, email):
         new_user = User(username=username, email=email)
         db.session.add(new_user)
@@ -54,18 +55,32 @@ def create_app():
 
     @app.route("/users", methods=["GET"])
     def get_all_users():
-        pass
+        users = User.query.all()
+
+        return users_schema.dump(users), 200
 
     @app.route("/users/<int:id>", methods=["GET"])
     def get_user_by_id(id):
-        pass
+        user = User.query.get(id)
+
+        return user_schema.dump(user), 200
 
     @app.route("/users", methods=["PUT"])
-    def update_user_by_id():
-        pass
+    @use_kwargs({"id": fields.Int(), "username": fields.Str(), "email": fields.Str()})
+    @marshal_with(UserSchema)
+    def update_user_by_id(id, username, email):
+        user = User.query.get(id)
+        user.username = username
+        user.email = email
+        db.session.commit()
+
+        return user_schema.dump(user), 200
 
     @app.route("/users/<int:id>", methods=["DELETE"])
     def delete_user(id):
-        pass
+        User.query.filter(User.id == id).delete()
+        db.session.commit()
+
+        return f"user {id} has been deleted.", 200
 
     return app
