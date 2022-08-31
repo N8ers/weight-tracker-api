@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
-from flask_marshmallow import Marshmallow
 
-from tracker.extensions import db, migrate
+from tracker.extensions import db, migrate, ma
 
 from tracker.blueprints import hi
+
+from tracker.models.users import User, UserSchema, user_schema, users_schema
 
 
 def create_app():
@@ -14,29 +15,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
     db.init_app(app)
     migrate.init_app(app, db)
-    ma = Marshmallow(app)
-
-    """
-    User Model
-    """
-    class User(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        username = db.Column(db.String(80), unique=True, nullable=False)
-        email = db.Column(db.String(120), unique=True, nullable=False)
-
-        def __repr__(self):
-            return f'<User {self.id} {self.username}>'
-
-    """
-    User Schema
-    """
-    class UserSchema(ma.Schema):
-        class Meta:
-            # Fields to expose
-            fields = ("id", "username", "email")
-
-    user_schema = UserSchema()
-    users_schema = UserSchema(many=True)
+    ma.init_app(app)
 
     app.register_blueprint(hi.blueprint)
 
