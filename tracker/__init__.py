@@ -5,6 +5,8 @@ from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 from flask_marshmallow import Marshmallow
 
+from tracker.blueprints import hi
+
 
 def create_app():
 
@@ -36,9 +38,7 @@ def create_app():
     user_schema = UserSchema()
     users_schema = UserSchema(many=True)
 
-    @app.route("/")
-    def hi():
-        return "<h1>Hi there!</h1>"
+    app.register_blueprint(hi.blueprint)
 
     """
     User Routes (CRUD)
