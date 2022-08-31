@@ -1,9 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 from flask_marshmallow import Marshmallow
+
+from tracker.extensions import db, migrate
 
 from tracker.blueprints import hi
 
@@ -12,8 +12,8 @@ def create_app():
 
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-    db = SQLAlchemy(app)
-    migrate = Migrate(app, db)
+    db.init_app(app)
+    migrate.init_app(app, db)
     ma = Marshmallow(app)
 
     """
