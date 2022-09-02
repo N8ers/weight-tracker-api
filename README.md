@@ -25,5 +25,8 @@ Migrate
 
 Docker
 
-- `docker-compose up --build` - pass the `-d` flag for detached mode
-- `docker-compose up`
+- `docker-compose up --build`
+- `docker-compose up -d api`
+- `docker-compose up -d db`
+  The `-d` flag is optional.
+  I leaned on [this article](https://www.tinystacks.com/blog-post/flask-crud-api-with-postgres/) pretty heavily for the docker setup
