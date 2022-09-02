@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/tracker-api
+    environment:
+      FLASK_APP: tracker
+      FLASK_ENV: development

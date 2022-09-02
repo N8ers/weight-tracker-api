@@ -22,3 +22,8 @@ Migrate
 - initialize db/migrations folder `flask --app tracker db init`
 - create a migration `flask --app tracker db migrate -m "Initial migration"`
 - run migration `flask --app tracker db upgrade`
+
+Docker
+
+- `docker-compose up --build` - pass the `-d` flag for detached mode
+- `docker-compose up`
