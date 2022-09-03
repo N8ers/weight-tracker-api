@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with, doc
 from marshmallow import fields
 
-from tracker.extensions import db, docs
+from tracker.extensions import db
 
 from tracker.models.users import UserSchema, User
 
@@ -59,10 +59,3 @@ def delete_user(id):
     db.session.commit()
 
     return f"user {id} has been deleted.", 200
-
-
-docs.register(create_user, blueprint=blueprint.name)
-docs.register(get_all_users, blueprint=blueprint.name)
-docs.register(get_user_by_id, blueprint=blueprint.name)
-docs.register(update_user_by_id, blueprint=blueprint.name)
-docs.register(delete_user, blueprint=blueprint.name)

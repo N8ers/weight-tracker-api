@@ -16,11 +16,13 @@ def create_app():
 
     docs.init_app(app)
 
-    # for (fpath, view_function) in app.view_functions.items():
-    #     blueprint_name = fpath.split(".")[0]
-    #     print("view_function, blueprint_name:: ",
-    #           view_function, blueprint_name)
-    # docs.register(view_function, blueprint=blueprint_name)
+    for (fpath, view_function) in app.view_functions.items():
+        blueprints_to_accept = ['hi', 'users']
+        blueprint_name = fpath.split(".")[0]
+        print("view_function, blueprint_name:: ",
+              view_function, blueprint_name)
+        if blueprint_name in blueprints_to_accept:
+            docs.register(view_function, blueprint=blueprint_name)
 
     @app.cli.command("seed_db")
     def seed_db():
