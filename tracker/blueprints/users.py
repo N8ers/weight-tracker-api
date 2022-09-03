@@ -4,7 +4,7 @@ from marshmallow import fields
 
 from tracker.extensions import db
 
-from tracker.models.users import UserSchema, User, user_schema, users_schema
+from tracker.models.users import UserSchema, User
 
 blueprint = Blueprint("users", __name__, url_prefix="/")
 
@@ -17,21 +17,23 @@ def create_user(username, email):
     db.session.add(new_user)
     db.session.commit()
 
-    return user_schema.dump(new_user), 200
+    return new_user, 200
 
 
 @blueprint.route("/users", methods=["GET"])
+@marshal_with(UserSchema(many=True))
 def get_all_users():
     users = User.query.all()
 
-    return users_schema.dump(users), 200
+    return users, 200
 
 
 @blueprint.route("/users/<int:id>", methods=["GET"])
+@marshal_with(UserSchema)
 def get_user_by_id(id):
     user = User.query.get(id)
 
-    return user_schema.dump(user), 200
+    return user, 200
 
 
 @blueprint.route("/users", methods=["PUT"])
@@ -43,7 +45,7 @@ def update_user_by_id(id, username, email):
     user.email = email
     db.session.commit()
 
-    return user_schema.dump(user), 200
+    return user, 200
 
 
 @blueprint.route("/users/<int:id>", methods=["DELETE"])
