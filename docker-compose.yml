@@ -10,7 +10,7 @@ services:
       FLASK_APP: tracker
       FLASK_ENV: development
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
-    entrypoint: entrypoint.sh
+    # entrypoint: /tracker-api/entrypoint.sh
     depends_on:
       - db
 
