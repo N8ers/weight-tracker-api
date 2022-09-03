@@ -36,3 +36,9 @@ Seed Database
 1. Have docker Running
 1. Enter the docker api container with: `docker exec -it tracker-api bash`
 1. Run `flask seed_db`
+
+Swagger
+
+- `http://localhost:5000/swagger-ui/`
+- as you create new blueprints add their names to the `blueprints_to_add_to_swagger` list in `__init__.py`
+- group endpoints with the `@doc(tags=[''])` decorator
