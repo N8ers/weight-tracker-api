@@ -30,3 +30,9 @@ Docker
 - `docker-compose up -d db`
   The `-d` flag is optional.
   I leaned on [this article](https://www.tinystacks.com/blog-post/flask-crud-api-with-postgres/) pretty heavily for the docker setup
+
+Seed Database
+
+1. Have docker Running
+1. Enter the docker api container with: `docker exec -it tracker-api bash`
+1. Run `flask seed_db`

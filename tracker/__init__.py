@@ -1,4 +1,5 @@
 import os
+import click
 
 from flask import Flask
 
@@ -12,6 +13,12 @@ def create_app():
     migrate.init_app(app, db)
     ma.init_app(app)
     register_blueprints(app)
+
+    @app.cli.command("seed_db")
+    def seed_db():
+        from tracker.seeder import create_users
+
+        create_users()
 
     return app
 
