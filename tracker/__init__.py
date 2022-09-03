@@ -1,9 +1,8 @@
 import os
-import click
 
 from flask import Flask
 
-from tracker.extensions import db, migrate, ma
+from tracker.extensions import db, migrate, ma, docs
 
 
 def create_app():
@@ -12,7 +11,16 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
+
     register_blueprints(app)
+
+    docs.init_app(app)
+
+    # for (fpath, view_function) in app.view_functions.items():
+    #     blueprint_name = fpath.split(".")[0]
+    #     print("view_function, blueprint_name:: ",
+    #           view_function, blueprint_name)
+    # docs.register(view_function, blueprint=blueprint_name)
 
     @app.cli.command("seed_db")
     def seed_db():
