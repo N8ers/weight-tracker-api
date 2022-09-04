@@ -34,7 +34,7 @@ Migrate inside Docker (this is the prefered way)
 
 Enter psql inside Docker
 
-- `docker exec -it db bash`
+- `docker exec -it tracker-db bash`
 - `psql -U <POSTGRES_USER> <POSTGRES_DB>` you can get those from the docker-compose file
 - list tables `\dt`
 - describe table `\d <table_name>`

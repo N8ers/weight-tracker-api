@@ -8,14 +8,14 @@ services:
       - .:/tracker-api
     environment:
       FLASK_APP: tracker
-      FLASK_DEBUG: true
+      FLASK_DEBUG: 'true'
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     # entrypoint: /tracker-api/entrypoint.sh
     depends_on:
       - db
 
   db:
-    container_name: db
+    container_name: tracker-db
     image: postgres:12
     ports:
       - "5432:5432"
