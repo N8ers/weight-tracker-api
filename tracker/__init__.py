@@ -21,16 +21,14 @@ def create_app():
         blueprints_to_add_to_swagger = ['hi', 'users', 'weights']
 
         blueprint_name = fpath.split(".")[0]
-        print("view_function, blueprint_name:: ",
-              view_function, blueprint_name)
         if blueprint_name in blueprints_to_add_to_swagger:
             docs.register(view_function, blueprint=blueprint_name)
 
     @app.cli.command("seed_db")
     def seed_db():
-        from tracker.seeder import create_users
+        from tracker.seeder import plant_seed
 
-        create_users()
+        plant_seed()
 
     return app
 
