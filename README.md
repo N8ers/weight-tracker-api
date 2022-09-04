@@ -22,6 +22,23 @@ Migrate
 - initialize db/migrations folder `flask --app tracker db init`
 - create a migration `flask --app tracker db migrate -m "Initial migration"`
 - run migration `flask --app tracker db upgrade`
+- migrate down `flask --app tracker db downgrade`
+
+Migrate inside Docker (this is the prefered way)
+
+- make sure you imported the modle into the `__init__.py` file
+- have docker containers running
+- enter the api container `docker exec -it tracker-api bash`
+- create the migration `flask --app tracker db migrate -m "migration_name"`
+- restart the docker container `docker-compose up` (might not be nessessary)
+
+Enter psql inside Docker
+
+- `docker exec -it db bash`
+- `psql -U <POSTGRES_USER> <POSTGRES_DB>` you can get those from the docker-compose file
+- list tables `\dt`
+- describe table `\d <table_name>`
+- to get users modify the query to be `select * from "user";`
 
 Docker
 
