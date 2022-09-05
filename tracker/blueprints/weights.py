@@ -31,3 +31,11 @@ def get_all_weights():
     weights = Weight.query.all()
 
     return weights, 200
+
+@blueprint.route("/weights/<int:user_id>", methods=["GET"])
+@doc(tags=['weights'])
+@marshal_with(WeightSchema(many=True))
+def get_weight_by_user(user_id):
+    weights = Weight.query.filter(Weight.user_id == user_id)
+
+    return weights, 200
