@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with, doc
 from marshmallow import fields
+import datetime
 
 from tracker.extensions import db
 
@@ -36,13 +37,39 @@ def get_all_weights():
 @doc(tags=['weights'])
 @use_kwargs(
     {
-        "limit": fields.Int(required=False)
+        "limit": fields.Int(required=False, description="Defaults to 60"),
+        "start_date_range": fields.Str(
+            required=False, 
+            description="YYYY-MM-DD, defaults to today if end_date_range is set"
+        ),
+        "end_date_range": fields.Str(required=False, description="YYYY-MM-DD")
     },
     location="query"
 )
 @marshal_with(WeightSchema(many=True))
-def get_weight_by_user(user_id, limit=60):
-    # limit is good, but we should also make sure to sort asc
-    weights = Weight.query.filter(Weight.user_id == user_id).limit(limit)
+def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=None):
+    query = (
+        Weight.query
+        .filter(Weight.user_id == user_id)
+    )
+
+    # TODO check date range format
+
+    if  end_date_range:
+        if start_date_range is None:
+            start_date_range = datetime.date.today()
+
+        query = (
+            query
+            .filter(Weight.date <= start_date_range)
+            .filter(Weight.date >= end_date_range)
+        )
+
+    query = (
+        query
+        .order_by(Weight.date.desc())
+        .limit(limit))
+
+    weights = query.all()
 
     return weights, 200
