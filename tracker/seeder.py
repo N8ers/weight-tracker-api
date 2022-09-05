@@ -15,7 +15,7 @@ def plant_seed():
             new_user = User(username=username, email=email)
             db.session.add(new_user)
             db.session.commit()
-            print(f"{new_user.username} created")
+            print(f"{new_user.username} created (id: {new_user.id})")
             user_ids.append(new_user.id)
 
         create_user("tsuki_cat", "tsuki_cat@meow.net")
@@ -54,3 +54,11 @@ def plant_seed():
 
     create_users()
     create_weights()
+
+def drop_all_data():
+
+    from tracker.models.users import User
+    from tracker.models.weight import Weight
+
+    User.query.delete()
+    Weight.query.delete()

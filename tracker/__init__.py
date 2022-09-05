@@ -27,8 +27,12 @@ def create_app():
     @app.cli.command("seed_db")
     def seed_db():
         from tracker.seeder import plant_seed
-
         plant_seed()
+
+    @app.cli.command("drop_data")
+    def drop_data():
+        from tracker.seeder import drop_all_data
+        drop_all_data()
 
     return app
 
