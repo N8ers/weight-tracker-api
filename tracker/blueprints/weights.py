@@ -34,8 +34,15 @@ def get_all_weights():
 
 @blueprint.route("/weights/<int:user_id>", methods=["GET"])
 @doc(tags=['weights'])
+@use_kwargs(
+    {
+        "limit": fields.Int(required=False)
+    },
+    location="query"
+)
 @marshal_with(WeightSchema(many=True))
-def get_weight_by_user(user_id):
-    weights = Weight.query.filter(Weight.user_id == user_id)
+def get_weight_by_user(user_id, limit=60):
+    # limit is good, but we should also make sure to sort asc
+    weights = Weight.query.filter(Weight.user_id == user_id).limit(limit)
 
     return weights, 200
