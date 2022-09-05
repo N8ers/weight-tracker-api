@@ -48,13 +48,9 @@ def get_all_weights():
 )
 @marshal_with(WeightSchema(many=True))
 def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=None):
-    query = (
-        Weight.query
-        .filter(Weight.user_id == user_id)
-    )
+    query = Weight.query.filter(Weight.user_id == user_id)
 
     # TODO check date range format
-
     if  end_date_range:
         if start_date_range is None:
             start_date_range = datetime.date.today()
@@ -65,11 +61,7 @@ def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=
             .filter(Weight.date >= end_date_range)
         )
 
-    query = (
-        query
-        .order_by(Weight.date.desc())
-        .limit(limit))
-
+    query = query.order_by(Weight.date.desc()).limit(limit)
     weights = query.all()
 
     return weights, 200
