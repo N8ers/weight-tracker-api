@@ -90,3 +90,17 @@ def delete_users_by_id(weight_ids):
     db.session.commit()
 
     return f"weight_ids {weight_ids} have been deleted.", 200
+
+
+@blueprint.route("/weights", methods=["PUT"])
+@doc(tags=["weights"])
+@use_kwargs({"id": fields.Int(), "weight": fields.Float()})
+@marshal_with(WeightSchema)
+def update_weight(id, weight):
+    # todo, make sure id exists - try/catch or something
+    weight_to_update = Weight.query.get(id)
+    print("WEIGJT \n\n", weight)
+    weight_to_update.weight = weight
+    db.session.commit()
+
+    return weight_to_update, 200

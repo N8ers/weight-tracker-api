@@ -44,6 +44,7 @@ def get_user_by_id(id):
 @use_kwargs({"id": fields.Int(), "username": fields.Str(), "email": fields.Str()})
 @marshal_with(UserSchema)
 def update_user_by_id(id, username, email):
+    # todo, make sure id exists - try/catch or something
     user = User.query.get(id)
     user.username = username
     user.email = email
