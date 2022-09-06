@@ -33,13 +33,14 @@ def get_all_weights():
 
     return weights, 200
 
+
 @blueprint.route("/weights/<int:user_id>", methods=["GET"])
 @doc(tags=['weights'])
 @use_kwargs(
     {
         "limit": fields.Int(required=False, description="Defaults to 60"),
         "start_date_range": fields.Str(
-            required=False, 
+            required=False,
             description="YYYY-MM-DD, defaults to today if end_date_range is set"
         ),
         "end_date_range": fields.Str(required=False, description="YYYY-MM-DD")
@@ -51,7 +52,7 @@ def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=
     query = Weight.query.filter(Weight.user_id == user_id)
 
     # TODO check date range format
-    if  end_date_range:
+    if end_date_range:
         if start_date_range is None:
             start_date_range = datetime.date.today()
 
@@ -65,3 +66,27 @@ def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=
     weights = query.all()
 
     return weights, 200
+
+
+@blueprint.route("/weights", methods=["DELETE"])
+@doc(tags=["weights"])
+@use_kwargs(
+    {
+        "weight_ids": fields.Str(
+            required=False,
+            description="A comma seperated string of weight_ids: '4,7,22'"
+        )
+    },
+    location="query"
+)
+def delete_users_by_id(weight_ids):
+    # TODO - if any fail to delete, capture them here and return who was deleted and who was not
+    weight_ids_to_delete = weight_ids.split(',')
+    print("weight ids to delete \n\n", weight_ids_to_delete)
+
+    for weight_id in weight_ids_to_delete:
+        Weight.query.filter(Weight.id == weight_id).delete()
+
+    db.session.commit()
+
+    return f"weight_ids {weight_ids} have been deleted.", 200
