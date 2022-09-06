@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 from tracker.extensions import db, migrate, ma, docs
-from tracker.models import users, weight
+from tracker.models import users, weight, goals
 
 
 def create_app():
@@ -18,7 +18,7 @@ def create_app():
     docs.init_app(app)
 
     for (fpath, view_function) in app.view_functions.items():
-        blueprints_to_add_to_swagger = ['hi', 'users', 'weights']
+        blueprints_to_add_to_swagger = ['hi', 'users', 'weights', 'goals']
 
         blueprint_name = fpath.split(".")[0]
         if blueprint_name in blueprints_to_add_to_swagger:
@@ -38,8 +38,9 @@ def create_app():
 
 
 def register_blueprints(app):
-    from tracker.blueprints import hi, users, weights
+    from tracker.blueprints import hi, users, weights, goals
 
     app.register_blueprint(hi.blueprint)
     app.register_blueprint(users.blueprint)
     app.register_blueprint(weights.blueprint)
+    app.register_blueprint(goals.blueprint)
