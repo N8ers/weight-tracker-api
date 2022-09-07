@@ -40,3 +40,12 @@ def update_goal(id, goal_weight):
     db.session.commit()
 
     return goal_to_update, 200
+
+
+@blueprint.route("/goals/<int:user_id>", methods=["GET"])
+@doc(tags=["goals"])
+@marshal_with(GoalSchema)
+def get_goal_by_user(user_id):
+    goal = Goal.query.filter(Goal.user_id == user_id).first()
+
+    return goal, 200
