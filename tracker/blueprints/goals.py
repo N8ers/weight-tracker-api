@@ -4,7 +4,7 @@ from marshmallow import fields
 
 from tracker.extensions import db
 
-from tracker.models.goals import Goal, GoalSchema
+from tracker.models.goals import Goal, GoalSchema, goal_schema
 
 blueprint = Blueprint("goals", __name__, url_prefix="/")
 
@@ -44,8 +44,14 @@ def update_goal(id, goal_weight):
 
 @blueprint.route("/goals/<int:user_id>", methods=["GET"])
 @doc(tags=["goals"])
-@marshal_with(GoalSchema)
-def get_goal_by_user(user_id):
-    goal = Goal.query.filter(Goal.user_id == user_id).first()
+@use_kwargs({"show_progress": fields.Bool(required=False)}, location="query")
+def get_goal_by_user(user_id, show_progress):
+    goal_result = Goal.query.filter(Goal.user_id == user_id).first()
+
+    goal = goal_schema.dump(goal_result)
+
+    if show_progress:
+        goal["goal_progress"] = goal_result.goal_progress()
+        goal["distance_from_goal"] = goal_result.distance_from_goal()
 
     return goal, 200

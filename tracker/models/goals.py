@@ -10,6 +10,20 @@ class Goal(db.Model):
     def __repr__(self):
         return f'<Goal {self.id} {self.goal_weight}>'
 
+    @classmethod
+    def goal_progress(cls):
+        # query weight by user
+        # get highest weight
+        # subtract it from the goal
+        # progress = result
+        return 12
+
+    @staticmethod
+    def distance_from_goal():
+        # get last recoreded weight
+        # subtract from goal
+        return 12
+
 
 class GoalSchema(ma.Schema):
     class Meta:
