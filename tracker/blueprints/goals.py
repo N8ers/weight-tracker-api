@@ -28,3 +28,15 @@ def get_all_goals():
     goals = Goal.query.all()
 
     return goals, 200
+
+
+@blueprint.route("/goals", methods=["PUT"])
+@doc(tags=["goals"])
+@use_kwargs({"id": fields.Integer(), "goal_weight": fields.Float()})
+@marshal_with(GoalSchema)
+def update_goal(id, goal_weight):
+    goal_to_update = Goal.query.get(id)
+    goal_to_update.goal_weight = goal_weight
+    db.session.commit()
+
+    return goal_to_update, 200
