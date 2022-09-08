@@ -51,7 +51,9 @@ def get_goal_by_user(user_id, show_progress):
     goal = goal_schema.dump(goal_result)
 
     if show_progress:
-        goal["goal_progress"] = goal_result.goal_progress()
-        goal["distance_from_goal"] = goal_result.distance_from_goal()
+        goal["last_recored_weight"] = goal_result.last_recorded_weight(user_id)
+        goal["goal_progress"] = goal_result.total_lost(user_id)
+        goal["distance_to_goal"] = goal_result.distance_to_goal(
+            user_id, goal_result.goal_weight)
 
     return goal, 200

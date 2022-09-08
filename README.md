@@ -63,8 +63,16 @@
 ## SQLAlchemy Notes
 
 ### Filter
+
 Much more robust
 `db.users.filter(db.users.name == 'Joe')`
 
 ### Filter_By
+
 `db.users.filter_by(name='Joe')`
+
+## Flask Notes
+
+### `@classmethod` & `@staticmethod`
+
+A good explination of these can be found in [this stack overflow post](https://stackoverflow.com/a/12179752/10801460)
