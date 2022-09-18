@@ -1,16 +1,17 @@
 services:
   api:
     container_name: tracker-api
-    build: .
+    build:
+      context: $PWD/tracker-api
+      dockerfile: $PWD/api.Dockerfile
     ports:
       - "5000:5000"
     volumes:
-      - .:/tracker-api
+      - $PWD/tracker-api
     environment:
       FLASK_APP: tracker
-      FLASK_DEBUG: 'true'
+      FLASK_DEBUG: "true"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
-    # entrypoint: /tracker-api/entrypoint.sh
     depends_on:
       - db
 
