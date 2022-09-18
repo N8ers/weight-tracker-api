@@ -27,5 +27,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  app:
+    container_name: tracker-ui
+    build:
+      context: $PWD/tracker-ui
+      dockerfile: $PWD/ui.Dockerfile
+    ports:
+      - 3000:3000
+    command: npm start
+
 volumes:
   pgdata: {}
