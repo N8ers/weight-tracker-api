@@ -42,13 +42,10 @@ def get_user_by_id(id):
 @blueprint.route("/users", methods=["PUT"])
 @doc(tags=['users'])
 @use_kwargs({"id": fields.Int(), "username": fields.Str(), "email": fields.Str()})
-@marshal_with(UserSchema, code=200)
+@marshal_with(UserSchema)
 def update_user_by_id(id, username, email):
+    # todo, make sure id exists - try/catch or something
     user = User.query.get(id)
-
-    if user is None:
-        return "user id does not exists", 400
-
     user.username = username
     user.email = email
     db.session.commit()
