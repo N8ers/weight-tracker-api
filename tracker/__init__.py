@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 from tracker.extensions import db, migrate, ma, docs
 from tracker.models import users, weight, goals
@@ -12,6 +13,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
+    CORS(app)
 
     register_blueprints(app)
 
