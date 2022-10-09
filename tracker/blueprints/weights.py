@@ -68,18 +68,10 @@ def get_weight_by_user(user_id, limit=60, start_date_range=None, end_date_range=
     return weights, 200
 
 
-@blueprint.route("/weights", methods=["DELETE"])
+@blueprint.route("/weights/<string:weight_ids>", methods=["DELETE"])
 @doc(tags=["weights"])
-@use_kwargs(
-    {
-        "weight_ids": fields.Str(
-            required=False,
-            description="A comma seperated string of weight_ids: '4,7,22'"
-        )
-    },
-    location="query"
-)
 def delete_users_by_id(weight_ids):
+    # TODO - add to the swagger docs that it can be a coma seperated set of `weight_ids`
     # TODO - if any fail to delete, capture them here and return who was deleted and who was not
     weight_ids_to_delete = weight_ids.split(',')
     print("weight ids to delete \n\n", weight_ids_to_delete)
