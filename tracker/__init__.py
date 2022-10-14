@@ -20,7 +20,7 @@ def create_app():
     docs.init_app(app)
 
     for (fpath, view_function) in app.view_functions.items():
-        blueprints_to_add_to_swagger = ['hi', 'users', 'weights', 'goals']
+        blueprints_to_add_to_swagger = ['hi', 'users', 'weights', 'goals', 'auth']
 
         blueprint_name = fpath.split(".")[0]
         if blueprint_name in blueprints_to_add_to_swagger:
@@ -40,9 +40,10 @@ def create_app():
 
 
 def register_blueprints(app):
-    from tracker.blueprints import hi, users, weights, goals
+    from tracker.blueprints import hi, users, weights, goals, auth
 
     app.register_blueprint(hi.blueprint)
     app.register_blueprint(users.blueprint)
     app.register_blueprint(weights.blueprint)
     app.register_blueprint(goals.blueprint)
+    app.register_blueprint(auth.blueprint)
