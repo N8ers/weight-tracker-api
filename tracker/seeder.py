@@ -7,20 +7,20 @@ def plant_seed():
     user_ids = []
 
     def create_users():
-        def create_user(username, email):
+        def create_user(username, email, password):
 
             from tracker.extensions import db
             from tracker.models.users import User
 
-            new_user = User(username=username, email=email)
+            new_user = User(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
             print(f"{new_user.username} created (id: {new_user.id})")
             user_ids.append(new_user.id)
 
-        create_user("tsuki_cat", "tsuki_cat@meow.net")
-        create_user("whiskey_whiskers", "whiskey_whiskers@meow.net")
-        create_user("claw_paw", "claw_paw@meow.net")
+        create_user("tsuki_cat", "tsuki_cat@meow.net", "meow1")
+        create_user("whiskey_whiskers", "whiskey_whiskers@meow.net", "meow2")
+        create_user("claw_paw", "claw_paw@meow.net", "meow3")
 
     def create_weights():
         def create_weight(date, weight, user_id):
@@ -56,9 +56,14 @@ def plant_seed():
     create_weights()
 
 def drop_all_data():
+    from tracker.extensions import db
 
     from tracker.models.users import User
     from tracker.models.weight import Weight
+    from tracker.models.goals   import Goal
 
-    User.query.delete()
     Weight.query.delete()
+    Goal.query.delete()
+    User.query.delete()
+
+    db.session.commit()
