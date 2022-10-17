@@ -7,18 +7,20 @@ from tracker.models.users import UserSchema, User
 
 blueprint = Blueprint("auth", __name__, url_prefix="/")
 
-@blueprint.route("/", methods=["POST"])
+@blueprint.route("/auth", methods=["POST"])
 @doc(tags=['auth'])
 @use_kwargs(
     { 
-        "username": fields.Str(required=True)
+        "username": fields.Str(required=True),
+        "password": fields.Str(required=True)
     }
 )
 @marshal_with(UserSchema)
-def authenticate_user(username):
-    # query db where user username & pw match
+def authenticate_user(username, password):
+    user = User.query.filter(User.username == username).filter(User.password == password).first()
 
-    user = User.query.filter(User.username == username).first()
+    if user is None:
+        return "Humm, that doesn't sound right", 400
 
     return user, 200
 
